@@ -1,5 +1,6 @@
 import Catalog from './components/Catalog.js';
 import Product from './components/Product.js';
+import User from './classes/User.js';
 
 const host = 'http://dpaggsfj-m1.wsr.ru/api';
 
@@ -22,7 +23,25 @@ const f = async (url, method = 'get', token = null, data = []) => {
     return await fetch(`${host}/${url}`, options).then(res => res.json());
 };
 
-customElements.define('shop-catalog', Catalog);
-customElements.define('shop-product', Product);
+const dEvent = (event, detail) => {
+    document.dispatchEvent(new CustomEvent(
+        event, {
+            detail: detail
+        }
+    ));
+}
 
-export {f};
+class App {
+    constructor(){
+        this.user = new User();
+        this.defineElements();
+    }
+
+    defineElements(){
+        customElements.define('shop-catalog', Catalog);
+        customElements.define('shop-product', Product);
+    }
+}
+new App();
+
+export {f, dEvent};
